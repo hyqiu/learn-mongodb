@@ -99,3 +99,5 @@ Créer un .gitignore
   .. db.collection('Todos').findOneAndDelete({completed: false}).then((result) => {
     console.log(result);
   })
+
+5 - Updating documents
