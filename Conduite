@@ -1,0 +1,82 @@
+1 - Connect to Mongo and write data
+  . Create a directory node-todo-api
+  . npm init
+  . Playground
+    -	Mongodb-connect.js
+    -	Npm I mongodb –save
+
+  . In mongodb-connect.js
+
+  const MongoClient = require('mongodb').MongoClient;
+
+  MongoClient.connect('mongodb://localhost:27017/TodoApp',
+  (err, db) => {
+    if (err){
+      return console.log('Unable to connect to MongoDB server');
+    }
+    console.log('Connected to MongoDB server');
+    db.collection('Users').insertOne({
+      name: 'Henri',
+      age: '25',
+      location: 'Paris'
+    }, (err, result) => {
+      if(err){
+        return console.log('Unable to insert user', err);
+      }
+
+      console.log(JSON.stringify(result.ops, undefined, 2));
+
+    });
+
+    db.close();
+}
+
+. node playground/mongodb-connect.js
+
+2 - ObjectId
+- Mongo was designed to scaled out easily;
+- you can specify _id property
+- You can get id from 'result.ops[0]._id'
+- Timestamp with 'result.ops[0]._id.getTimestamp()'
+
+- ES6 object destructuring: takes a property from object and into variable
+  . var user = {name: 'andrew', age:25}
+  . var {name} = user;
+
+- const {MongoClient, ObjectID} = require('mongodb'); // identical from above
+-  var obj = new ObjectID();
+   console.log(obj);
+
+3 - Fetching Data
+- Robo 3T : dans Todos, clic droit, "insert document"
+- db.collection('Todos').find() : retourne tous les documents
+
+- find.toArray() --> retourne une promesse de montrer le document en array
+
+--> db.collection('Todos').find().toArray().then((docs) => {
+  console.log('Todos');
+  console.log(JSON.stringify(docs, undefined, 2));
+}, (err) => {
+  console.log('Unable to fetch todos', err);
+});
+
+- .find({completed: false}) : query que ceux dont completed : false
+
+- .find({_id: '5970fb4bd4e3c31a29e50cfb'})
+--> NE MARCHERA PAS car ce n'est pas un string
+  --> .find({
+    _id: new ObjectID('5970fb4bd4e3c31a29e50cfb')
+  })
+
+- Method count for Cursor in API doc
+db.collection('Todos').find().count().then((count) => {
+  console.log(`Todos count: ${count}`);
+  //console.log(JSON.stringify(docs, undefined, 2));
+}, (err) => {
+  console.log('Unable to fetch todos', err);
+});
+
+........
+Créer un .gitignore
+  - taper node_modules/
+........
