@@ -80,3 +80,22 @@ db.collection('Todos').find().count().then((count) => {
 Créer un .gitignore
   - taper node_modules/
 ........
+
+4 - Deleting documents
+- deleteMany
+  .. db.collection('Todos').deleteMany({text: 'Eat lunch'}).then((result) => {
+      console.log(result);
+    });
+  .. result: { n: 3, ok: 1 }
+
+- deleteOne
+  . Deletes the first record
+  db.collection('Todos').deleteOne({text: 'Eat lunch'}).then((result) => {
+    console.log(result);
+  });
+
+- findOneAndDelete
+  .. Get the record back
+  .. db.collection('Todos').findOneAndDelete({completed: false}).then((result) => {
+    console.log(result);
+  })
