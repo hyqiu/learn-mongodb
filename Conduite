@@ -1,3 +1,5 @@
+#########################
+
 1 - Connect to Mongo and write data
   . Create a directory node-todo-api
   . npm init
@@ -47,6 +49,8 @@
 -  var obj = new ObjectID();
    console.log(obj);
 
+#########################
+
 3 - Fetching Data
 - Robo 3T : dans Todos, clic droit, "insert document"
 - db.collection('Todos').find() : retourne tous les documents
@@ -81,6 +85,8 @@ Créer un .gitignore
   - taper node_modules/
 ........
 
+#########################
+
 4 - Deleting documents
 - deleteMany
   .. db.collection('Todos').deleteMany({text: 'Eat lunch'}).then((result) => {
@@ -100,4 +106,76 @@ Créer un .gitignore
     console.log(result);
   })
 
+#########################
+
 5 - Updating documents
+. https://docs.mongodb.com/manual/reference/operator/update/
+..   db.collection('Users').findOneAndUpdate(
+    {_id: new ObjectID('597355f308255d7041f2e433')},
+    { $inc: {age: 1} },
+    {returnOriginal: false}
+  ).then((result) => {console.log(result)});
+. $set, $inc (opérateurs d'actualisation)
+
+#########################
+
+6 - Mongoose ORM
+Object Relational Mapping
+Structure data
+. mongoosejs.com
+npm i mongoose --save
+
+#########################
+
+7 - Setting up mongoose
+. var mongoose = require('mongoose');
+  mongoose.Promise = global.Promise;
+  mongoose.connect('mongodb://localhost:27017/TodoApp');
+
+. mongoose works with MODELS
+  .. var Todo = mongoose.model('Todo', {
+    text: {
+      type: String
+    },
+    completed: {
+      type: Boolean
+    },
+    completedAt: {
+      type: Number
+    }
+  });
+
+.  var newTodo = new Todo({
+   text: 'Doing dishes'
+ });
+
+. newTodo.save().then((doc) => {
+  console.log('Saved todo', doc);
+}, (e) => {
+  console.log('Unable to save todo')
+})
+
+8 - Validators, types, defaults
+. mongoose validators
+. mongoose schemas
+.. var Todo = mongoose.model('Todo', {
+  text: {
+    type: String,
+    required: true,
+    minlength: 1,
+    trim: true
+  },
+  completed: {
+    type: Boolean,
+    default: false
+  },
+  completedAt: {
+    type: Number,
+    default: null
+  }
+});
+. If you put a number instead of text, it will be cast as string
+
+#########################
+
+8 - Postman
