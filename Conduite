@@ -179,6 +179,7 @@ npm i mongoose --save
 #########################
 
 8 - Postman et al.
+
 . server/db/mongoose.js
 . server/models/todo.js
 . server/models/user.js
@@ -225,7 +226,49 @@ app.listen(3000, () => {
 
 #########################
 
+9 - Testing POST /todos
+
 . npm i expect, mocha, nodemon, supertest
 
 . describe block {test cases, group all routes}
-  .. 
+
+. Route test
+  ..   it('should create a new todo', (done) => {
+      var text = 'Test todo text';
+
+      request(app)
+        .post('/todos')
+        .send({text})
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.text).toBe(text);
+        })
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+
+          Todo.find().then((todos) => {
+            expect(todos.length).toBe(1);
+            expect(todos[0].text).toBe(text);
+            done();
+          }).catch((e) => done(e));
+
+        });
+
+. Clean all todos prior
+... beforeEach((done) => {
+  Todo.remove({}).then(() => {
+    done();
+  })
+});
+
+. In package.json
+...  "scripts": {
+    "test": "mocha server/**/*.test.js",
+    "test-watch": "nodemon --exec 'npm test'"
+  },
+
+#########################
+
+10 - List Resources - GET /todos
